@@ -1,4 +1,4 @@
-import PyQt5.QtWidgets
+from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
 from PyQt5 import QtCore
 from PyQt5 import uic
@@ -6,14 +6,20 @@ import sys
 import requests
 
 
-class Main(PyQt5.QtWidgets.QWidget):
+class Main(QWidget):
     def __init__(self):
-
+        """
+        Initialized a program.
+        """
         super(Main, self).__init__()
         uic.loadUi('map.ui', self)
+
+        # Костыль
         self.type_of_map.setEditable(True)
         self.type_of_map.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
         self.type_of_map.setEditable(False)
+
+        # setup map and connect buttons
         self.set_map()
         self.findit.clicked.connect(self.set_map)
         self.resetit.clicked.connect(self.reset_map)
@@ -26,7 +32,8 @@ class Main(PyQt5.QtWidgets.QWidget):
         self.get_address()
 
     def reset_map(self):
-        file = open('base.txt')
+
+        file = open('config.cfg')  # open configuration
         data = file.read()
         data = data.split('\n')
         self.latit_inp.setText(data[0])
@@ -34,6 +41,7 @@ class Main(PyQt5.QtWidgets.QWidget):
         self.spin.setValue(float(data[2]))
         self.point_to_find.setText('')
         self.full_address.setText('')
+
         self.set_map()
 
     def api_req(self):
@@ -52,13 +60,16 @@ class Main(PyQt5.QtWidgets.QWidget):
                 print('Http статус:', response.status_code, '(', response.reason, ')')
                 sys.exit(1)
             else:
-                json_response = response.json()
-                toponym = json_response['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']
-                toponym_coodrinates = toponym['Point']['pos']
-                latitude, longitude = toponym_coodrinates.split(' ')
-                self.latit_inp.setText(latitude)
-                self.longit_inp.setText(longitude)
-                spn = self.spin.value()
+                try:
+                    json_response = response.json()
+                    toponym = json_response['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']
+                    toponym_coodrinates = toponym['Point']['pos']
+                    latitude, longitude = toponym_coodrinates.split(' ')
+                    self.latit_inp.setText(latitude)
+                    self.longit_inp.setText(longitude)
+                    spn = self.spin.value()
+                except:
+                    self.full_address.setText('Адрес не существует')
 
         types = {
             'Режим "Карта"': 'map',
@@ -97,9 +108,22 @@ class Main(PyQt5.QtWidgets.QWidget):
             else:
                 json_response = response.json()
 
-                toponym = json_response['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']
-                toponym_address = toponym['metaDataProperty']['GeocoderMetaData']['text']
-                self.full_address.setText(f'Полный адрес места: {toponym_address}')
+                try:
+                    toponym = json_response['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']
+                    toponym_address = toponym['metaDataProperty']['GeocoderMetaData']['text']
+
+                    if self.mail_address.isChecked():
+                        try:
+                            post_code = toponym["metaDataProperty"]["GeocoderMetaData"]["Address"]["postal_code"]
+                            self.full_address.setText(
+                                f'Полный адрес места: {toponym_address}, почтовый индекс: {post_code}')
+                        except:
+                            self.full_address.setText(
+                                f'Полный адрес места: {toponym_address}, почтовый индекс отсутствует')
+                    else:
+                        self.full_address.setText(f'Полный адрес места: {toponym_address}')
+                except:
+                    self.full_address.setText('Адрес не существует')
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_PageUp:
@@ -115,7 +139,7 @@ def except_hook(cls, exception, traceback):
 
 
 if __name__ == "__main__":
-    app = PyQt5.QtWidgets.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     ex = Main()
     ex.show()
     sys.excepthook = except_hook

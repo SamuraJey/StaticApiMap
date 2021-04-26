@@ -39,7 +39,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Найти!</string>
+    <string>Find it!</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="longit_inp">
@@ -47,8 +47,8 @@
     <rect>
      <x>10</x>
      <y>40</y>
-     <width>410</width>
-     <height>20</height>
+     <width>411</width>
+     <height>21</height>
     </rect>
    </property>
    <property name="text">
@@ -63,8 +63,8 @@
     <rect>
      <x>10</x>
      <y>110</y>
-     <width>1100</width>
-     <height>720</height>
+     <width>1101</width>
+     <height>721</height>
     </rect>
    </property>
    <property name="text">
@@ -76,7 +76,7 @@
     <rect>
      <x>10</x>
      <y>70</y>
-     <width>410</width>
+     <width>411</width>
      <height>22</height>
     </rect>
    </property>
@@ -94,9 +94,9 @@
    <property name="geometry">
     <rect>
      <x>660</x>
-     <y>50</y>
-     <width>450</width>
-     <height>40</height>
+     <y>40</y>
+     <width>451</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
@@ -125,8 +125,8 @@
     <rect>
      <x>660</x>
      <y>10</y>
-     <width>450</width>
-     <height>30</height>
+     <width>451</width>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
@@ -138,7 +138,7 @@
     <string/>
    </property>
    <property name="placeholderText">
-    <string>Поиск объекта</string>
+    <string>Input point</string>
    </property>
   </widget>
   <widget class="QPushButton" name="resetit">
@@ -146,21 +146,21 @@
     <rect>
      <x>545</x>
      <y>10</y>
-     <width>110</width>
-     <height>80</height>
+     <width>111</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="text">
-    <string>Сброс</string>
+    <string>Reset map</string>
    </property>
   </widget>
   <widget class="QLabel" name="full_address">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>850</y>
-     <width>1100</width>
-     <height>40</height>
+     <y>852</y>
+     <width>1101</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="font">
@@ -173,6 +173,19 @@
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="mail_address">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>75</y>
+     <width>271</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Указывать почтовый индекс в адресной строке</string>
    </property>
   </widget>
  </widget>
